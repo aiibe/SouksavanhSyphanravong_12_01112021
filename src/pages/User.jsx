@@ -4,7 +4,8 @@ import { findUserById } from "../api/query";
 import "../css/User.css";
 
 function User() {
-  const [user, setUser] = useState(null);
+  const [currentUser, setUser] = useState(null);
+  const [fetched, setFetched] = useState(false);
   const { id } = useParams();
 
   useEffect(async () => {
@@ -12,19 +13,25 @@ function User() {
      * Find user and get infos
      */
     const user = await findUserById(id);
-    setUser(user);
+    setFetched(true);
+    setUser(currentUser ? user : null);
   }, []);
 
   /**
    * Loading while getting user from API
    */
-  if (!user) return <p>Loading...</p>;
+  if (!fetched) return <p>Loading...</p>;
+
+  /**
+   * User has not been found
+   */
+  if (!currentUser) return <p>404 - No user found</p>;
 
   return (
     <>
       <div className="announce">
         <h1 className="announce__title">
-          Bonjour <span>{user.userInfos.firstName}</span>
+          Bonjour <span>{currentUser.userInfos.firstName}</span>
         </h1>
         <p className="announce__body">
           Félicitation ! Vous avez explosé vos objectifs hier 👏
