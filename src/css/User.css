@@ -1,0 +1,9 @@
+.announce__title {
+  font-size: 48px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.announce__title span {
+  color: #ff0101;
+}

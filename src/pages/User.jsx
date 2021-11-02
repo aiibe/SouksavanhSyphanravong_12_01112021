@@ -1,12 +1,45 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { findUserById } from "../api/query";
+import "../css/User.css";
 
 function User() {
-  useEffect(() => {
-    fetch("http://localhost:3000/user/12")
-      .then((res) => res.json())
-      .then((data) => console.log({ data }));
+  const [user, setUser] = useState(null);
+  const { id } = useParams();
+
+  useEffect(async () => {
+    /**
+     * Find user and get infos
+     */
+    const user = await findUserById(id);
+    setUser(user);
   }, []);
-  return <p>Hey user</p>;
+
+  /**
+   * Loading while getting user from API
+   */
+  if (!user) return <p>Loading...</p>;
+
+  return (
+    <>
+      <div className="announce">
+        <h1 className="announce__title">
+          Bonjour <span>{user.userInfos.firstName}</span>
+        </h1>
+        <p className="announce__body">
+          Félicitation ! Vous avez explosé vos objectifs hier 👏
+        </p>
+      </div>
+
+      <div className="chart">
+        <div className="chart__main">
+          <div className="activity"></div>
+          <div className="misc"></div>
+        </div>
+        <div className="chart__aside"></div>
+      </div>
+    </>
+  );
 }
 
 export default User;

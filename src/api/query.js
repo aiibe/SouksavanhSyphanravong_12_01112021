@@ -5,8 +5,8 @@ const BASE_URL = "http://localhost:3000";
  * @param {number} id User ID
  * @returns Promise
  */
-export async function findUserById(id = 12) {
+export async function findUserById(id) {
   const res = await fetch(BASE_URL + "/user/" + id);
-  const data = await res.json();
+  const { data } = await res.json();
   return data;
 }
