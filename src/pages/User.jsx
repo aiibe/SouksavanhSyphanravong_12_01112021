@@ -14,7 +14,7 @@ function User() {
      */
     const user = await findUserById(id);
     setFetched(true);
-    setUser(currentUser ? user : null);
+    setUser(user ? user : null);
   }, []);
 
   /**
