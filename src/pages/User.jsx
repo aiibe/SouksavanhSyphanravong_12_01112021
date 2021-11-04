@@ -54,7 +54,7 @@ function User() {
             title="Calories"
             unit="kCal"
             count={currentUser.keyData.calorieCount}
-            rgb={[255, 0, 0]}
+            bgColor="rgba(255, 0, 0, 0.06)"
           >
             <Fire />
           </KeyData>
@@ -62,7 +62,7 @@ function User() {
             title="Proteines"
             unit="g"
             count={currentUser.keyData.proteinCount}
-            rgb={[74, 184, 255]}
+            bgColor="rgba(74, 184, 255, 0.06)"
           >
             <Potion />
           </KeyData>
@@ -70,7 +70,7 @@ function User() {
             title="Glucides"
             unit="g"
             count={currentUser.keyData.carbohydrateCount}
-            rgb={[253, 204, 12]}
+            bgColor="rgba(253, 204, 12, 0.06)"
           >
             <Apple />
           </KeyData>
@@ -78,7 +78,7 @@ function User() {
             title="Lipides"
             unit="g"
             count={currentUser.keyData.lipidCount}
-            rgb={[253, 81, 129]}
+            bgColor="rgba(253, 81, 129, 0.06)"
           >
             <Burger />
           </KeyData>

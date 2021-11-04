@@ -4,20 +4,12 @@ export default function KeyData({
   title,
   count,
   unit,
+  bgColor = "rgb(0,0,0)",
   children,
-  rgb = [0, 0, 0],
 }) {
-  // Set transparency to parent element of icon
-  function setColorTransparency() {
-    return `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.06)`;
-  }
-
   return (
     <div className="key__block">
-      <div
-        className="key__icon"
-        style={{ backgroundColor: setColorTransparency() }}
-      >
+      <div className="key__icon" style={{ backgroundColor: bgColor }}>
         {children}
       </div>
       <div className="key__info">
