@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { findUserById } from "../api/query";
+import KeyData from "../components/KeyData";
 import "../css/User.css";
+import Apple from "../icons/Apple";
+import Burger from "../icons/Burger";
+import Fire from "../icons/Fire";
+import Potion from "../icons/Potion";
 
 function User() {
   const [currentUser, setUser] = useState(null);
@@ -43,7 +48,41 @@ function User() {
           <div className="activity"></div>
           <div className="misc"></div>
         </div>
-        <div className="chart__aside"></div>
+
+        <div className="chart__aside">
+          <KeyData
+            title="Calories"
+            unit="kCal"
+            count={currentUser.keyData.calorieCount}
+            rgb={[255, 0, 0]}
+          >
+            <Fire />
+          </KeyData>
+          <KeyData
+            title="Proteines"
+            unit="g"
+            count={currentUser.keyData.proteinCount}
+            rgb={[74, 184, 255]}
+          >
+            <Potion />
+          </KeyData>
+          <KeyData
+            title="Glucides"
+            unit="g"
+            count={currentUser.keyData.carbohydrateCount}
+            rgb={[253, 204, 12]}
+          >
+            <Apple />
+          </KeyData>
+          <KeyData
+            title="Lipides"
+            unit="g"
+            count={currentUser.keyData.lipidCount}
+            rgb={[253, 81, 129]}
+          >
+            <Burger />
+          </KeyData>
+        </div>
       </div>
     </>
   );

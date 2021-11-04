@@ -1,0 +1,27 @@
+.key__block {
+  display: flex;
+  align-items: center;
+  background-color: #fbfbfb;
+  padding: 30px;
+}
+
+.key__icon {
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.key__info {
+  margin-left: 30px;
+}
+
+.key__info h3 {
+  margin: 0;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.key__info small {
+  font-weight: 500;
+  font-size: 14px;
+  color: #74798c;
+}

@@ -7,3 +7,15 @@
 .announce__title span {
   color: #ff0101;
 }
+
+.chart {
+  display: grid;
+  grid-template-columns: 1fr 25%;
+  grid-template-rows: 1fr;
+  gap: 0px 30px;
+}
+
+.chart__aside {
+  display: flex;
+  flex-direction: column;
+}
