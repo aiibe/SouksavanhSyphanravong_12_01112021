@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { findUserById } from "../api/query";
+import ActivityChart from "../components/ActivityChart";
 import KeyData from "../components/KeyData";
 import "../css/User.css";
 import Apple from "../icons/Apple";
@@ -45,8 +46,8 @@ function User() {
 
       <div className="chart">
         <div className="chart__main">
-          <div className="activity"></div>
-          <div className="misc"></div>
+          <ActivityChart userId={currentUser.id} />
+          <div className="chart__misc"></div>
         </div>
 
         <div className="chart__aside">

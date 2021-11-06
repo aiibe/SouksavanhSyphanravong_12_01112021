@@ -10,7 +10,7 @@
 
 .chart {
   display: grid;
-  grid-template-columns: 1fr 25%;
+  grid-template-columns: 860px 25%;
   grid-template-rows: 1fr;
   gap: 0px 30px;
 }
