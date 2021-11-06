@@ -15,7 +15,7 @@ export default function ActivityChart({ userId }) {
     // Define margins and size for chart
     const margin = 50;
     const width = 860 - margin * 2;
-    const height = 320 - margin * 2;
+    const height = 280 - margin * 2;
 
     // Define scale X
     const xScale = scaleBand()
