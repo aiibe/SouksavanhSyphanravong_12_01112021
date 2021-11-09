@@ -14,9 +14,21 @@ export async function findUserById(id) {
 /**
  * Get user activity by id
  * @param {number} id User ID
+ * @returns Promise
  */
 export async function getUserActivity(id) {
   const res = await fetch(BASE_URL + "/user/" + id + "/activity");
+  const { data } = await res.json();
+  return data;
+}
+
+/**
+ * Get user average sessions by id
+ * @param {number} id User ID
+ * @returns Promise
+ */
+export async function getUserSession(id) {
+  const res = await fetch(BASE_URL + "/user/" + id + "/average-sessions");
   const { data } = await res.json();
   return data;
 }

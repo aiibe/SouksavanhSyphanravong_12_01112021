@@ -3,7 +3,7 @@
   border-radius: 5px;
 }
 
-.chart__title {
+.activity__title {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -11,25 +11,25 @@
   padding-top: 30px;
 }
 
-.chart__title h2 {
+.activity__title h2 {
   font-size: 15px;
   font-weight: 500;
   margin: 0;
 }
 
-.chart__legend {
+.activity__legend {
   display: flex;
   margin: 0;
   padding: 0;
 }
 
-.chart__legend li {
+.activity__legend li {
   list-style: none;
   font-size: 14px;
   margin-left: 20px;
 }
 
-.chart__legend li::before {
+.activity__legend li::before {
   content: "";
   display: inline-block;
   width: 10px;
@@ -38,10 +38,10 @@
   margin-right: 5px;
 }
 
-.chart__legend li:first-child::before {
+.activity__legend li:first-child::before {
   background-color: #282d30;
 }
 
-.chart__legend li:last-child::before {
+.activity__legend li:last-child::before {
   background-color: #e60000;
 }

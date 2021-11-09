@@ -197,9 +197,9 @@ export default function ActivityChart({ userId }) {
 
   return (
     <div className="chart__activity">
-      <div className="chart__title">
+      <div className="activity__title">
         <h2>Activité quotidienne</h2>
-        <ul className="chart__legend">
+        <ul className="activity__legend">
           <li>Poids (kg)</li>
           <li>Calories brûlées (kCal)</li>
         </ul>
