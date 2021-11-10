@@ -15,6 +15,12 @@
   gap: 0px 30px;
 }
 
+.chart__misc {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
 .chart__aside {
   display: flex;
   flex-direction: column;

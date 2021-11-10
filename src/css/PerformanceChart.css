@@ -1,0 +1,8 @@
+.chart__performance {
+  background-color: #282d30;
+  border-radius: 5px;
+}
+
+.chart__performance svg {
+  display: block;
+}

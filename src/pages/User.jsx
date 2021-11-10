@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import { findUserById } from "../api/query";
 import ActivityChart from "../components/ActivityChart";
 import KeyData from "../components/KeyData";
+import PerformanceChart from "../components/PerformanceChart";
 import SessionChart from "../components/SessionChart";
 import "../css/User.css";
 import Apple from "../icons/Apple";
@@ -50,6 +51,7 @@ function User() {
           <ActivityChart userId={currentUser.id} />
           <div className="chart__misc">
             <SessionChart userId={currentUser.id} />
+            <PerformanceChart userId={currentUser.id} />
           </div>
         </div>
 

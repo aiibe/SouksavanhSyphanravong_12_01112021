@@ -32,3 +32,14 @@ export async function getUserSession(id) {
   const { data } = await res.json();
   return data;
 }
+
+/**
+ * Get user performance stats
+ * @param {number} id User Id
+ * @returns Promise
+ */
+export async function getUserPerformance(id) {
+  const res = await fetch(BASE_URL + "/user/" + id + "/performance");
+  const { data } = await res.json();
+  return data;
+}
