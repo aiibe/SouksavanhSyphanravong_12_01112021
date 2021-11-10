@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { getUserPerformance } from "../api/query";
-import { select, scalePoint, scaleLinear, axisRight, line } from "d3";
+import { select, scalePoint, scaleLinear, line } from "d3";
 import "../css/PerformanceChart.css";
+import { getSpiderCoord } from "../helper/spiderChart";
 
 export default function PerformanceChart({ userId }) {
   const chartContainer = useRef(null);
@@ -15,16 +16,17 @@ export default function PerformanceChart({ userId }) {
      */
 
     // Define SVG size
-    const margin = 40,
-      height = 260 - margin,
-      width = 260 - margin,
-      box = height - margin,
-      radius = box / 2;
+    const MARGIN = 40,
+      HEIGHT = 260 - MARGIN,
+      width = 260 - MARGIN,
+      BOX = HEIGHT - MARGIN,
+      RADIUS = BOX / 2,
+      OFFSET = Math.PI;
 
     // SVG
     const svg = select(chartContainer.current)
-      .attr("width", width + margin)
-      .attr("height", height + margin);
+      .attr("width", width + MARGIN)
+      .attr("height", HEIGHT + MARGIN);
 
     // Clean up
     svg.selectAll("*").remove();
@@ -32,12 +34,12 @@ export default function PerformanceChart({ userId }) {
     // Add container
     const container = svg
       .append("g")
-      .attr("transform", `translate(${margin},${margin})`);
+      .attr("transform", `translate(${MARGIN},${MARGIN})`);
 
     // Add centered container
     const center = container
       .append("g")
-      .attr("transform", `translate(${radius}, ${radius})`);
+      .attr("transform", `translate(${RADIUS}, ${RADIUS})`);
 
     /**
      * Add background polygons
@@ -45,15 +47,18 @@ export default function PerformanceChart({ userId }) {
 
     // Define scale
     const domain = [0, 50, 100, 150, 200, 250];
-    const scale = scalePoint().domain(domain).range([0, radius]);
+    const scale = scalePoint().domain(domain).range([0, RADIUS]);
 
     // Add polygons
     domain.forEach((tick) => {
       // Define each tick coordinates
-      const points = data.map(({ kind }) => ({
-        x: scale(tick) * Math.sin(2 * Math.PI * (kind / data.length) + Math.PI),
-        y: scale(tick) * Math.cos(2 * Math.PI * (kind / data.length) + Math.PI),
-      }));
+      const points = data.map((_, i) =>
+        getSpiderCoord({
+          radius: scale(tick),
+          angle: 2 * Math.PI * ((i + 1) / data.length),
+          offset: OFFSET,
+        })
+      );
 
       // Draw each polygon
       center
@@ -85,22 +90,20 @@ export default function PerformanceChart({ userId }) {
     ];
 
     // Add text labels
-    data.forEach(({ kind }, i) => {
+    data.forEach((_, i) => {
       const label = labels[i];
-      const distance = radius + 20;
+      const { x, y } = getSpiderCoord({
+        radius: RADIUS + 20,
+        angle: 2 * Math.PI * ((i + 1) / data.length),
+        offset: OFFSET,
+      });
 
       // Position labels around polygon
       center
         .append("text")
         .text(label)
-        .attr(
-          "x",
-          distance * Math.sin(2 * Math.PI * (kind / data.length) + Math.PI)
-        )
-        .attr(
-          "y",
-          distance * Math.cos(2 * Math.PI * (kind / data.length) + Math.PI)
-        )
+        .attr("x", x)
+        .attr("y", y)
         .attr("fill", "#fff")
         .attr("font-family", "Roboto")
         .attr("font-size", 12)
@@ -113,17 +116,16 @@ export default function PerformanceChart({ userId }) {
      */
 
     // Define scale
-    const statScale = scaleLinear().domain([0, 250]).range([0, radius]);
+    const statScale = scaleLinear().domain([0, 250]).range([0, RADIUS]);
 
     // Define stats coordinates
-    const statPoints = data.map(({ value, kind }) => ({
-      x:
-        statScale(value) *
-        Math.sin(2 * Math.PI * (kind / data.length) + Math.PI),
-      y:
-        statScale(value) *
-        Math.cos(2 * Math.PI * (kind / data.length) + Math.PI),
-    }));
+    const statPoints = data.map(({ value }, i) =>
+      getSpiderCoord({
+        radius: statScale(value),
+        angle: 2 * Math.PI * ((i + 1) / data.length),
+        offset: OFFSET,
+      })
+    );
 
     // Draw stats polygon
     center
