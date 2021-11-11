@@ -4,6 +4,14 @@
   position: relative;
 }
 
+.chart__score span {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
 .score__indicator {
   position: absolute;
   top: 50%;
@@ -13,14 +21,14 @@
   text-align: center;
 }
 
-.chart__score h2 {
+.score__indicator h2 {
   font-size: 26px;
   font-weight: 600;
   margin: 0;
   margin-bottom: 5px;
 }
 
-.chart__score p {
+.score__indicator p {
   color: #74798c;
   font-size: 16px;
   font-weight: 500;

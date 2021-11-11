@@ -65,6 +65,7 @@ export default function ScoreChart({ score = 12 }) {
 
   return (
     <div className="chart__score">
+      <span>Score</span>
       <div className="score__indicator">
         <h2>{score * 100}%</h2>
         <p>de votre objectif</p>
