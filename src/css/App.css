@@ -1,4 +1,13 @@
 main {
-  margin-top: 150px;
-  margin-left: 210px;
+  margin-top: 120px;
+  margin-left: 140px;
+  width: 860px;
+}
+
+@media (min-width: 1280px) {
+  main {
+    width: 1040px;
+    margin-top: 120px !important;
+    margin: 0 auto;
+  }
 }

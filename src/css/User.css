@@ -9,19 +9,33 @@
 }
 
 .chart {
-  display: grid;
-  grid-template-columns: 860px 25%;
-  grid-template-rows: 1fr;
-  gap: 0px 30px;
+  display: flex;
+  flex-direction: column;
 }
 
 .chart__misc {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
+  margin-bottom: 30px;
 }
 
 .chart__aside {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+@media (min-width: 1280px) {
+  .chart {
+    display: grid;
+    grid-template-columns: 860px 25%;
+    grid-template-rows: 1fr;
+    gap: 0px 30px;
+  }
+
+  .chart__aside {
+    display: flex;
+    flex-direction: column;
+  }
 }
