@@ -1,10 +1,12 @@
 import { useEffect, useRef } from "react";
 import {
   select,
+  selectAll,
   scaleLinear,
   line,
   scalePoint,
   axisBottom,
+  axisRight,
   curveCardinal,
 } from "d3";
 import { getUserSession } from "../api/query";
@@ -23,39 +25,39 @@ export default function SessionChart({ userId }) {
     const userSession = sessions.map((s, i) => ({ ...s, letter: days[i] }));
 
     // Define margins and size for chart
-    const marginBottom = 60;
-    const width = 260;
-    const height = 260 - marginBottom;
+    const MARGIN = 60;
+    const WIDTH = 267;
+    const HEIGHT = 267 - MARGIN;
 
-    // Define y scale
-    const yScale = scaleLinear()
-      .domain([Math.min(...durations), Math.max(...durations)])
-      .range([height / 2, 0]);
-
-    // Define x scale
-    const xScale = scalePoint()
-      .domain(userSession)
-      .range([0, width])
-      .padding(0.5);
-    const xGenerate = axisBottom(xScale)
-      .ticks(7)
-      .tickFormat((_, i) => days[i]);
-
-    // Start drawing user sessions chart
-
-    // SVG container
+    /**
+     * SVG
+     */
     const svg = select(chartContainer.current);
-    // Clean up
+
+    // Clean up old drawing
     svg.selectAll("*").remove();
 
-    // Set SVG size
-    svg.attr("width", width).attr("height", height + marginBottom);
+    // Style SVG
+    svg.attr("width", WIDTH).attr("height", HEIGHT + MARGIN);
 
-    // Add x axis
+    /**
+     * Add x axis for labels and points
+     */
+
+    // Define scale
+    const xScale = scalePoint()
+        .domain(userSession)
+        .range([0, WIDTH])
+        .padding(0.5),
+      xGenerate = axisBottom(xScale)
+        .ticks(7)
+        .tickFormat((_, i) => days[i]);
+
+    // Draw x axis
     const xContainer = svg
       .append("g")
       .call(xGenerate)
-      .attr("transform", `translate(0, ${height})`);
+      .attr("transform", `translate(0, ${HEIGHT})`);
 
     // Remove domain path and ticks
     xContainer.select(".domain").remove();
@@ -69,21 +71,44 @@ export default function SessionChart({ userId }) {
       .attr("font-size", 12)
       .attr("fill", "rgba(255,255,255, 0.6)");
 
-    // Add line
+    /**
+     * Add line path for user sessions
+     */
+
+    // Define y axis scale
+    const yScale = scaleLinear()
+      .domain([Math.min(...durations), Math.max(...durations)])
+      .range([HEIGHT / 2, 0]);
+
+    // Define new overflow data
+    const overflow_data = [
+      { ...userSession[0], day: 0 }, // fake data
+      ...userSession,
+      { ...userSession[0], day: 10 }, // fake data
+    ];
+
+    // Translate group to the left by this offset
+    const offset = WIDTH / userSession.length;
+
+    // Define another x scale (overflowed)
+    const xScaleOver = scalePoint()
+      .domain(overflow_data)
+      .range([0, WIDTH + offset * 2])
+      .padding(0.5);
+
+    // Draw line
     svg
       .append("g")
-      .attr("class", "line")
-      .selectAll(".line")
-      .data([userSession])
-      .join("path")
+      .datum(overflow_data)
+      .append("path")
       .attr("fill", "none")
       .attr("stroke-width", 2)
       .attr("stroke", "#fff")
-      .attr("transform", `translate(0, ${height - height / 2})`)
+      .attr("transform", `translate(-${offset}, ${HEIGHT - HEIGHT / 2})`)
       .attr(
         "d",
         line()
-          .x(xScale)
+          .x(xScaleOver)
           .y(yScale(Math.min(...durations)))
           .curve(curveCardinal.tension(0.1))
       )
@@ -92,20 +117,22 @@ export default function SessionChart({ userId }) {
       .attr(
         "d",
         line()
-          .x(xScale)
+          .x(xScaleOver)
           .y(({ sessionLength }) => yScale(sessionLength))
           .curve(curveCardinal.tension(0.1))
       );
 
-    // Add background shadow
+    /**
+     * Add background rectangles
+     */
     svg
       .append("g")
       .attr("class", "bg-shadow")
       .selectAll("rect")
       .data(userSession)
       .join("rect")
-      .attr("height", height + marginBottom)
-      .attr("width", width)
+      .attr("height", HEIGHT + MARGIN)
+      .attr("width", WIDTH)
       .attr("fill", "rgba(0,0,0,0.1)")
       .attr("transform", (s) => `translate(${xScale(s)}, 0)`)
       .attr("opacity", 0)
@@ -118,7 +145,11 @@ export default function SessionChart({ userId }) {
         select(`.data-point-${data.day}`).attr("opacity", 0);
       });
 
-    // Add points
+    /**
+     * Add points
+     */
+
+    // Group points
     const pointContainer = svg
       .append("g")
       .attr("class", "points")
@@ -131,7 +162,7 @@ export default function SessionChart({ userId }) {
         "transform",
         (s) =>
           `translate(${xScale(s)}, ${
-            height - height / 2 + yScale(s.sessionLength)
+            HEIGHT - HEIGHT / 2 + yScale(s.sessionLength)
           })`
       );
 
