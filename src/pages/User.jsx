@@ -4,6 +4,7 @@ import { findUserById } from "../api/query";
 import ActivityChart from "../components/ActivityChart";
 import KeyData from "../components/KeyData";
 import PerformanceChart from "../components/PerformanceChart";
+import ScoreChart from "../components/ScoreChart";
 import SessionChart from "../components/SessionChart";
 import "../css/User.css";
 import Apple from "../icons/Apple";
@@ -52,6 +53,13 @@ function User() {
           <div className="chart__misc">
             <SessionChart userId={currentUser.id} />
             <PerformanceChart userId={currentUser.id} />
+            <ScoreChart
+              score={
+                currentUser.todayScore
+                  ? currentUser.todayScore
+                  : currentUser.score
+              }
+            />
           </div>
         </div>
 

@@ -18,28 +18,23 @@ export default function PerformanceChart({ userId }) {
     // Define SVG size
     const MARGIN = 40,
       HEIGHT = 260 - MARGIN,
-      width = 260 - MARGIN,
+      WIDTH = 260 - MARGIN,
       BOX = HEIGHT - MARGIN,
       RADIUS = BOX / 2,
       OFFSET = Math.PI;
 
     // SVG
     const svg = select(chartContainer.current)
-      .attr("width", width + MARGIN)
+      .attr("width", WIDTH + MARGIN)
       .attr("height", HEIGHT + MARGIN);
 
     // Clean up
     svg.selectAll("*").remove();
 
-    // Add container
-    const container = svg
+    // Add center container
+    const center = svg
       .append("g")
-      .attr("transform", `translate(${MARGIN},${MARGIN})`);
-
-    // Add centered container
-    const center = container
-      .append("g")
-      .attr("transform", `translate(${RADIUS}, ${RADIUS})`);
+      .attr("transform", `translate(${RADIUS + MARGIN},${RADIUS + MARGIN})`);
 
     /**
      * Add background polygons
@@ -91,14 +86,17 @@ export default function PerformanceChart({ userId }) {
 
     // Add text labels
     data.forEach((_, i) => {
+      // Map data with new labels
       const label = labels[i];
+
+      // Define each text coordinates
       const { x, y } = getSpiderCoord({
         radius: RADIUS + 20,
         angle: 2 * Math.PI * ((i + 1) / data.length),
         offset: OFFSET,
       });
 
-      // Position labels around polygon
+      // Draw labels around polygon
       center
         .append("text")
         .text(label)

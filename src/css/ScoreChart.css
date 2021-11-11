@@ -1,0 +1,29 @@
+.chart__score {
+  background-color: #fbfbfb;
+  border-radius: 5px;
+  position: relative;
+}
+
+.score__indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  text-align: center;
+}
+
+.chart__score h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+.chart__score p {
+  color: #74798c;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  margin: 0;
+}
