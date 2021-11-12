@@ -1,16 +1,15 @@
-import { useEffect, useRef } from "react";
 import {
-  select,
-  selectAll,
-  scaleLinear,
-  line,
-  scalePoint,
   axisBottom,
   curveCardinal,
+  line,
+  scaleLinear,
+  scalePoint,
+  select,
 } from "d3";
+import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
 import { getUserSession } from "../api/query";
 import "../css/SessionChart.css";
-import PropTypes from "prop-types";
 
 function SessionChart({ userId }) {
   const chartContainer = useRef(null);

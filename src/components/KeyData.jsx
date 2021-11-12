@@ -1,5 +1,5 @@
-import "../css/KeyData.css";
 import PropTypes from "prop-types";
+import "../css/KeyData.css";
 
 function KeyData({ title, count, unit, bgColor = "rgb(0,0,0)", children }) {
   return (

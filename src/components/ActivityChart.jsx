@@ -1,15 +1,8 @@
-import { useRef, useEffect } from "react";
-import {
-  select,
-  selectAll,
-  scaleLinear,
-  scaleBand,
-  axisBottom,
-  axisRight,
-} from "d3";
+import { axisBottom, axisRight, scaleBand, scaleLinear, select } from "d3";
+import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
 import { getUserActivity } from "../api/query";
 import "../css/ActivityChart.css";
-import PropTypes from "prop-types";
 
 function ActivityChart({ userId }) {
   const chartContainer = useRef(null);

@@ -1,9 +1,9 @@
+import { line, scaleLinear, scalePoint, select } from "d3";
+import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
 import { getUserPerformance } from "../api/query";
-import { select, scalePoint, scaleLinear, line } from "d3";
 import "../css/PerformanceChart.css";
 import { getSpiderCoord } from "../helper/spiderChart";
-import PropTypes from "prop-types";
 
 function PerformanceChart({ userId }) {
   const chartContainer = useRef(null);

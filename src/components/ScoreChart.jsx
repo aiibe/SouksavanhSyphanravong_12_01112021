@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
-import { select, selectAll, arc, interpolate } from "d3";
-import "../css/ScoreChart.css";
+import { arc, interpolate, select } from "d3";
 import PropTypes from "prop-types";
+import { useEffect, useRef } from "react";
+import "../css/ScoreChart.css";
 
 function ScoreChart({ score = 35 }) {
   const chartContainer = useRef(null);
