@@ -4,6 +4,7 @@ import User from "./pages/User";
 import Home from "./pages/Home";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
           </Route>
           <Route exact path="/">
             <Home />
+          </Route>
+          <Route path="*">
+            <NotFound />
           </Route>
         </Switch>
       </main>

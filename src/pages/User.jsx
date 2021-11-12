@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import { findUserById } from "../api/query";
 import ActivityChart from "../components/ActivityChart";
 import KeyData from "../components/KeyData";
+import NotFound from "../components/NotFound";
 import PerformanceChart from "../components/PerformanceChart";
 import ScoreChart from "../components/ScoreChart";
 import SessionChart from "../components/SessionChart";
@@ -34,7 +35,7 @@ function User() {
   /**
    * User has not been found
    */
-  if (!currentUser) return <p>404 - No user found</p>;
+  if (!currentUser) return <NotFound />;
 
   return (
     <>
