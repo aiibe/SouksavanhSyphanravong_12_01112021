@@ -1,4 +1,22 @@
-const BASE_URL = "http://localhost:3000";
+/**
+ * By default, user data comes from mockServer.js
+ * which mocks our real API response
+ */
+
+import {
+  mockFindUserById,
+  mockGetUserActivity,
+  mockGetUserPerformance,
+  mockGetUserSession,
+} from "./mockServer";
+
+// Set API url and port if any
+const API_URL = "http://localhost:3000";
+
+// Should load data from local API ?
+// Set to true will get data from local server
+// at API_URL configured above
+const CALL_FROM_API = false;
 
 /**
  * Find auser by id
@@ -6,7 +24,9 @@ const BASE_URL = "http://localhost:3000";
  * @returns Promise
  */
 export async function findUserById(id) {
-  const res = await fetch(BASE_URL + "/user/" + id);
+  const res = CALL_FROM_API
+    ? await fetch(API_URL + "/user/" + id)
+    : await mockFindUserById(id);
   const { data } = await res.json();
   return data;
 }
@@ -17,7 +37,9 @@ export async function findUserById(id) {
  * @returns Promise
  */
 export async function getUserActivity(id) {
-  const res = await fetch(BASE_URL + "/user/" + id + "/activity");
+  const res = CALL_FROM_API
+    ? await fetch(API_URL + "/user/" + id + "/activity")
+    : await mockGetUserActivity(id);
   const { data } = await res.json();
   return data;
 }
@@ -28,7 +50,9 @@ export async function getUserActivity(id) {
  * @returns Promise
  */
 export async function getUserSession(id) {
-  const res = await fetch(BASE_URL + "/user/" + id + "/average-sessions");
+  const res = CALL_FROM_API
+    ? await fetch(API_URL + "/user/" + id + "/average-sessions")
+    : await mockGetUserSession(id);
   const { data } = await res.json();
   return data;
 }
@@ -39,7 +63,9 @@ export async function getUserSession(id) {
  * @returns Promise
  */
 export async function getUserPerformance(id) {
-  const res = await fetch(BASE_URL + "/user/" + id + "/performance");
+  const res = CALL_FROM_API
+    ? await fetch(API_URL + "/user/" + id + "/performance")
+    : await mockGetUserPerformance(id);
   const { data } = await res.json();
   return data;
 }
