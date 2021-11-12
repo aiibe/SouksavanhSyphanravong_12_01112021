@@ -10,8 +10,9 @@ import {
 } from "d3";
 import { getUserSession } from "../api/query";
 import "../css/SessionChart.css";
+import PropTypes from "prop-types";
 
-export default function SessionChart({ userId }) {
+function SessionChart({ userId }) {
   const chartContainer = useRef(null);
 
   useEffect(async () => {
@@ -209,3 +210,9 @@ export default function SessionChart({ userId }) {
     </div>
   );
 }
+
+SessionChart.propTypes = {
+  userId: PropTypes.number.isRequired,
+};
+
+export default SessionChart;

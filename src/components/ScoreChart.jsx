@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 import { select, selectAll, arc, interpolate } from "d3";
 import "../css/ScoreChart.css";
+import PropTypes from "prop-types";
 
-export default function ScoreChart({ score = 12 }) {
+function ScoreChart({ score = 35 }) {
   const chartContainer = useRef(null);
 
   useEffect(() => {
@@ -74,3 +75,9 @@ export default function ScoreChart({ score = 12 }) {
     </div>
   );
 }
+
+ScoreChart.propTypes = {
+  score: PropTypes.number.isRequired,
+};
+
+export default ScoreChart;

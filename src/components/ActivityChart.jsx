@@ -9,8 +9,9 @@ import {
 } from "d3";
 import { getUserActivity } from "../api/query";
 import "../css/ActivityChart.css";
+import PropTypes from "prop-types";
 
-export default function ActivityChart({ userId }) {
+function ActivityChart({ userId }) {
   const chartContainer = useRef(null);
 
   useEffect(async () => {
@@ -215,3 +216,9 @@ export default function ActivityChart({ userId }) {
     </div>
   );
 }
+
+ActivityChart.propTypes = {
+  userId: PropTypes.number.isRequired,
+};
+
+export default ActivityChart;

@@ -1,12 +1,7 @@
 import "../css/KeyData.css";
+import PropTypes from "prop-types";
 
-export default function KeyData({
-  title,
-  count,
-  unit,
-  bgColor = "rgb(0,0,0)",
-  children,
-}) {
+function KeyData({ title, count, unit, bgColor = "rgb(0,0,0)", children }) {
   return (
     <div className="key__block">
       <div className="key__icon" style={{ backgroundColor: bgColor }}>
@@ -22,3 +17,12 @@ export default function KeyData({
     </div>
   );
 }
+
+KeyData.propTypes = {
+  title: PropTypes.any.isRequired,
+  count: PropTypes.number.isRequired,
+  unit: PropTypes.any.isRequired,
+  bgColor: PropTypes.string,
+};
+
+export default KeyData;

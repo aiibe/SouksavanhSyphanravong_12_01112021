@@ -3,8 +3,9 @@ import { getUserPerformance } from "../api/query";
 import { select, scalePoint, scaleLinear, line } from "d3";
 import "../css/PerformanceChart.css";
 import { getSpiderCoord } from "../helper/spiderChart";
+import PropTypes from "prop-types";
 
-export default function PerformanceChart({ userId }) {
+function PerformanceChart({ userId }) {
   const chartContainer = useRef(null);
 
   useEffect(async () => {
@@ -147,3 +148,9 @@ export default function PerformanceChart({ userId }) {
     </div>
   );
 }
+
+PerformanceChart.propTypes = {
+  userId: PropTypes.number.isRequired,
+};
+
+export default PerformanceChart;
