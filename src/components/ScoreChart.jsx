@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { select, arc, interpolate } from "d3";
+import { select, selectAll, arc, interpolate } from "d3";
 import "../css/ScoreChart.css";
 
 export default function ScoreChart({ score = 12 }) {
@@ -16,7 +16,7 @@ export default function ScoreChart({ score = 12 }) {
     const svg = select(chartContainer.current);
 
     // Clean old drawing
-    svg.select("*").remove();
+    svg.selectAll("*").remove();
 
     // Style SVG
     svg

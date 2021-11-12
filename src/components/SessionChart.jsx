@@ -6,7 +6,6 @@ import {
   line,
   scalePoint,
   axisBottom,
-  axisRight,
   curveCardinal,
 } from "d3";
 import { getUserSession } from "../api/query";

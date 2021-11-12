@@ -1,5 +1,12 @@
 import { useRef, useEffect } from "react";
-import { select, scaleLinear, scaleBand, axisBottom, axisRight } from "d3";
+import {
+  select,
+  selectAll,
+  scaleLinear,
+  scaleBand,
+  axisBottom,
+  axisRight,
+} from "d3";
 import { getUserActivity } from "../api/query";
 import "../css/ActivityChart.css";
 
