@@ -10,13 +10,7 @@ import {
   mockGetUserSession,
 } from "./mockServer";
 
-// Set API url and port if any
-const API_URL = "http://localhost:3000";
-
-// Should load data from local API ?
-// Set to true will get data from local server
-// at API_URL configured above
-const CALL_FROM_API = false;
+import { API_URL, CALL_FROM_API } from "./config";
 
 /**
  * Find auser by id
