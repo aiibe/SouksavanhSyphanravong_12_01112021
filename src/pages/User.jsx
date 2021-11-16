@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { findUserById } from "../api/query";
+import Service from "../api";
 import ActivityChart from "../components/ActivityChart";
 import KeyData from "../components/KeyData";
 import NotFound from "../components/NotFound";
@@ -22,9 +22,11 @@ function User() {
     /**
      * Find user and get infos
      */
-    const user = await findUserById(id);
+    const res = await Service.findUserById(id);
+    const { data } = await res.json();
+
     setFetched(true);
-    setUser(user ? user : null);
+    setUser(data ? data : null);
   }, []);
 
   /**

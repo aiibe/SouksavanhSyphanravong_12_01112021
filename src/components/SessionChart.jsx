@@ -8,7 +8,7 @@ import {
 } from "d3";
 import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
-import { getUserSession } from "../api/query";
+import Service from "../api";
 import "../css/SessionChart.css";
 
 function SessionChart({ userId }) {
@@ -16,7 +16,9 @@ function SessionChart({ userId }) {
 
   useEffect(async () => {
     // Fetch user sessions
-    const { sessions } = await getUserSession(userId);
+    const res = await Service.getUserSession(userId);
+    const { data } = await res.json();
+    const { sessions } = data;
 
     // Tranform data structure
     const days = ["L", "M", "M", "J", "V", "S", "D"];

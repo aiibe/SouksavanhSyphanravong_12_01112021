@@ -1,7 +1,7 @@
 import { line, scaleLinear, scalePoint, select } from "d3";
 import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
-import { getUserPerformance } from "../api/query";
+import Service from "../api";
 import "../css/PerformanceChart.css";
 import { getSpiderCoord } from "../helper/spiderChart";
 
@@ -10,7 +10,9 @@ function PerformanceChart({ userId }) {
 
   useEffect(async () => {
     // Fetch user performance stats
-    const { data } = await getUserPerformance(userId);
+    const res = await Service.getUserPerformance(userId);
+    const json = await res.json();
+    const { data } = json.data;
 
     /**
      * Prepare SVG container

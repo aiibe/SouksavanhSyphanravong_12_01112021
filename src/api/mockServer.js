@@ -3,7 +3,7 @@
  * @param {number} id User ID
  * @returns Promise
  */
-export function mockFindUserById(id) {
+export function findUserById(id) {
   const _id = parseInt(id);
   switch (_id) {
     case 12:
@@ -52,7 +52,7 @@ export function mockFindUserById(id) {
  * @param {number} id User ID
  * @returns Promise
  */
-export function mockGetUserActivity(id) {
+export function getUserActivity(id) {
   const _id = parseInt(id);
   switch (_id) {
     case 18:
@@ -104,7 +104,7 @@ export function mockGetUserActivity(id) {
  * @param {number} id User ID
  * @returns Promise
  */
-export function mockGetUserSession(id) {
+export function getUserSession(id) {
   const _id = parseInt(id);
   switch (_id) {
     case 12:
@@ -155,7 +155,7 @@ export function mockGetUserSession(id) {
  * @param {number} id User ID
  * @returns Promise
  */
-export function mockGetUserPerformance(id) {
+export function getUserPerformance(id) {
   const _id = parseInt(id);
   switch (_id) {
     case 12:

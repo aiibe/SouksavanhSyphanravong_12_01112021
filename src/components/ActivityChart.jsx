@@ -1,7 +1,7 @@
 import { axisBottom, axisRight, scaleBand, scaleLinear, select } from "d3";
 import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
-import { getUserActivity } from "../api/query";
+import Service from "../api";
 import "../css/ActivityChart.css";
 
 function ActivityChart({ userId }) {
@@ -9,7 +9,10 @@ function ActivityChart({ userId }) {
 
   useEffect(async () => {
     // Fetch data
-    const { sessions } = await getUserActivity(userId);
+    const res = await Service.getUserActivity(userId);
+    const { data } = await res.json();
+    const { sessions } = data;
+
     const userWeights = sessions.map(({ kilogram }) => parseInt(kilogram));
     const userCalories = sessions.map(({ calories }) => parseInt(calories));
 
