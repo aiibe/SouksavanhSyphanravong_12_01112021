@@ -9,7 +9,7 @@ function KeyData({ title, count, unit, bgColor = "rgb(0,0,0)", children }) {
       </div>
       <div className="key__info">
         <h3>
-          {count}
+          {count.toLocaleString()}
           {unit}
         </h3>
         <small>{title}</small>
