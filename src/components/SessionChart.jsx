@@ -8,53 +8,45 @@ import {
 } from "d3";
 import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
-import Service from "../api";
 import "../css/SessionChart.css";
+import Session from "../models/Session";
 
-function SessionChart({ userId }) {
+/**
+ * Display user session chart
+ * @param {{session: Session}} param0 Session instance
+ * @returns {JSX.Element}
+ */
+function SessionChart({ session }) {
   const chartContainer = useRef(null);
 
   useEffect(async () => {
-    // Fetch user sessions
-    const res = await Service.getUserSession(userId);
-    const { data } = await res.json();
-    const { sessions } = data;
+    // Unless sessions available, skip drawing process
+    if (!session) return;
 
-    // Tranform data structure
-    const days = ["L", "M", "M", "J", "V", "S", "D"];
-    const durations = sessions.map(({ sessionLength }) => sessionLength);
-    const userSession = sessions.map((s, i) => ({ ...s, letter: days[i] }));
+    const userSession = session.getSessions();
 
     // Define margins and size for chart
     const MARGIN = 60;
     const WIDTH = 267;
     const HEIGHT = 267 - MARGIN;
 
-    /**
-     * SVG
-     */
+    // Select SVG
     const svg = select(chartContainer.current);
-
-    // Clean up old drawing
-    svg.selectAll("*").remove();
-
-    // Style SVG
     svg.attr("width", WIDTH).attr("height", HEIGHT + MARGIN);
+    svg.selectAll("*").remove(); // Clean old chart
 
-    /**
-     * Add x axis for labels and points
-     */
-
-    // Define scale
+    // Define x scale for points
     const xScale = scalePoint()
-        .domain(userSession)
-        .range([0, WIDTH])
-        .padding(0.5),
-      xGenerate = axisBottom(xScale)
-        .ticks(7)
-        .tickFormat((_, i) => days[i]);
+      .domain(userSession)
+      .range([0, WIDTH])
+      .padding(0.5);
 
-    // Draw x axis
+    // Generate axis
+    const xGenerate = axisBottom(xScale)
+      .ticks(7)
+      .tickFormat(({ letter }) => letter);
+
+    // Apply axis
     const xContainer = svg
       .append("g")
       .call(xGenerate)
@@ -72,35 +64,28 @@ function SessionChart({ userId }) {
       .attr("font-size", 12)
       .attr("fill", "rgba(255,255,255, 0.6)");
 
-    /**
-     * Add line path for user sessions
-     */
-
     // Define y axis scale
+    const durations = session.getDurations();
     const yScale = scaleLinear()
       .domain([Math.min(...durations), Math.max(...durations)])
       .range([HEIGHT / 2, 0]);
 
-    // Define new overflow data
-    const overflow_data = [
-      { ...userSession[0], day: 0 }, // fake data
-      ...userSession,
-      { ...userSession[0], day: 10 }, // fake data
-    ];
-
     // Translate group to the left by this offset
     const offset = WIDTH / userSession.length;
 
+    // Overflow sessions
+    const overSessions = session.getOverSessions();
+
     // Define another x scale (overflowed)
     const xScaleOver = scalePoint()
-      .domain(overflow_data)
+      .domain(overSessions)
       .range([0, WIDTH + offset * 2])
       .padding(0.5);
 
     // Draw line
     svg
       .append("g")
-      .datum(overflow_data)
+      .datum(overSessions)
       .append("path")
       .attr("fill", "none")
       .attr("stroke-width", 2)
@@ -123,9 +108,7 @@ function SessionChart({ userId }) {
           .curve(curveCardinal.tension(0.1))
       );
 
-    /**
-     * Add background rectangles
-     */
+    // Add background rectangles
     svg
       .append("g")
       .attr("class", "bg-shadow")
@@ -146,11 +129,7 @@ function SessionChart({ userId }) {
         select(`.data-point-${data.day}`).attr("opacity", 0);
       });
 
-    /**
-     * Add points
-     */
-
-    // Group points
+    // Add points
     const pointContainer = svg
       .append("g")
       .attr("class", "points")
@@ -181,7 +160,7 @@ function SessionChart({ userId }) {
       .attr("class", "tooltip")
       .attr(
         "transform",
-        (_, i) => `translate(${i === userSession.length - 1 ? -50 : 10}, -40)`
+        (_, i) => `translate(${i === userSession.length - 1 ? -50 : 10}, -40)` // last tooltip flips to the left
       );
 
     tooltips
@@ -192,7 +171,7 @@ function SessionChart({ userId }) {
 
     tooltips
       .append("text")
-      .text((d) => `${d.sessionLength} min`)
+      .text(({ sessionLength }) => `${sessionLength} min`)
       .attr("transform", `translate(20,13)`)
       .attr("dominant-baseline", "middle")
       .attr("text-anchor", "middle")
@@ -213,7 +192,7 @@ function SessionChart({ userId }) {
 }
 
 SessionChart.propTypes = {
-  userId: PropTypes.number.isRequired,
+  session: PropTypes.object.isRequired,
 };
 
 export default SessionChart;

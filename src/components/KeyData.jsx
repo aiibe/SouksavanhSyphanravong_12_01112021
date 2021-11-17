@@ -1,6 +1,11 @@
 import PropTypes from "prop-types";
 import "../css/KeyData.css";
 
+/**
+ * KeyData
+ * @param {{title: string, count: number, unit: string, bgColor: string, children: JSX.Element}} param0
+ * @returns {JSX.Element}
+ */
 function KeyData({ title, count, unit, bgColor = "rgb(0,0,0)", children }) {
   return (
     <div className="key__block">
@@ -19,9 +24,9 @@ function KeyData({ title, count, unit, bgColor = "rgb(0,0,0)", children }) {
 }
 
 KeyData.propTypes = {
-  title: PropTypes.any.isRequired,
+  title: PropTypes.string.isRequired,
   count: PropTypes.number.isRequired,
-  unit: PropTypes.any.isRequired,
+  unit: PropTypes.string.isRequired,
   bgColor: PropTypes.string,
 };
 

@@ -1,67 +1,59 @@
 import { axisBottom, axisRight, scaleBand, scaleLinear, select } from "d3";
 import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
-import Service from "../api";
 import "../css/ActivityChart.css";
+import Activity from "../models/Activity";
 
-function ActivityChart({ userId }) {
+/**
+ * Display user activity chart
+ * @param {{activity: Activity}} props  Activity instance
+ * @returns {JSX.Element}
+ */
+function ActivityChart(props) {
   const chartContainer = useRef(null);
 
-  useEffect(async () => {
-    // Fetch data
-    const res = await Service.getUserActivity(userId);
-    const { data } = await res.json();
-    const { sessions } = data;
+  useEffect(() => {
+    const sessions = props.activity.getSessions();
 
-    const userWeights = sessions.map(({ kilogram }) => parseInt(kilogram));
-    const userCalories = sessions.map(({ calories }) => parseInt(calories));
+    // Unless sessions available, skip drawing process
+    if (!sessions) return;
 
-    // Define margins and size for chart
-    const margin = 50;
-    const width = 860 - margin * 2;
-    const height = 280 - margin * 2;
+    // Define MARGINs and size for chart
+    const MARGIN = 50;
+    const WIDTH = 860 - MARGIN * 2;
+    const HEIGHT = 280 - MARGIN * 2;
 
-    // Define scale X
-    const xScale = scaleBand()
-      .domain(sessions.map((_, index) => index + 1))
-      .range([0, width])
-      .padding(0.01);
-
-    // Define scale Y based on user weights
-    const yScale = scaleLinear()
-      .domain([Math.min(...userWeights) - 1, Math.max(...userWeights) + 1])
-      .range([height, 0]);
-
-    // Axis generators
-    const xGenerate = axisBottom(xScale).ticks(sessions.length).tickSize(0);
-    const yGenerate = axisRight(yScale).ticks(3).tickSize(-width); // dashed bars
-
-    // SVG
+    // Select SVG
     const svg = select(chartContainer.current);
+    svg.attr("width", WIDTH + MARGIN * 2).attr("height", HEIGHT + MARGIN * 2);
+    svg.selectAll("*").remove(); // Clean up old chart
 
-    // Clean up
-    svg.selectAll("*").remove();
-
-    // Set SVG size
-    svg.attr("width", width + margin * 2).attr("height", height + margin * 2);
-
-    // Add container with margins included
+    // Add container
     let container = svg
       .append("g")
       .attr("class", "inner")
-      .attr("transform", `translate(${margin - 20},${margin})`);
+      .attr("transform", `translate(${MARGIN - 20},${MARGIN})`);
 
-    // Add x axis
+    // Define scale for x axis
+    const xScale = scaleBand()
+      .domain(sessions.map((_, index) => index + 1)) // Display 1 to sessions.length under axis
+      .range([0, WIDTH])
+      .padding(0.01);
+
+    // Generate axis with ticks
+    const xGenerate = axisBottom(xScale).ticks(sessions.length).tickSize(0);
+
+    // Apply axis
     const xAxis = container
       .append("g")
       .attr("class", "x-axis")
       .call(xGenerate)
-      .attr("transform", `translate(0, ${height})`);
+      .attr("transform", `translate(0, ${HEIGHT})`);
 
-    // Style line x axis
+    // Style x axis line
     xAxis.select(".domain").attr("stroke", "#DEDEDE");
 
-    // Style text x axis
+    // Style x axis texts
     xAxis
       .selectAll(".tick text")
       .attr("transform", `translate(0, 20)`)
@@ -70,23 +62,32 @@ function ActivityChart({ userId }) {
       .attr("font-weight", 500)
       .attr("fill", "#9B9EAC");
 
-    // Add y axis
+    // Define scale for y axis based on user weights
+    const weights = props.activity.getWeights();
+    const yScale = scaleLinear()
+      .domain([Math.min(...weights) - 1, Math.max(...weights) + 1])
+      .range([HEIGHT, 0]);
+
+    // Generate axis
+    const yGenerate = axisRight(yScale).ticks(3).tickSize(-WIDTH); // dashed bars
+
+    // Apply axis
     const yAxis = container
       .append("g")
       .attr("class", "y-axis")
       .call(yGenerate)
-      .attr("transform", `translate(${width}, 0)`);
+      .attr("transform", `translate(${WIDTH}, 0)`);
 
-    // Remove vertical line y axis
+    // Remove line y axis
     yAxis.select(".domain").remove();
 
-    // Style ticks
+    // Style y axis ticks as background dotted lines
     yAxis
       .selectAll(".tick line")
       .attr("stroke-dasharray", 2)
       .attr("stroke", "#dedede");
 
-    // Style text y axis
+    // Style y axis texts
     yAxis
       .selectAll(".tick text")
       .attr("transform", `translate(20, 0)`)
@@ -95,49 +96,48 @@ function ActivityChart({ userId }) {
       .attr("font-weight", 500)
       .attr("fill", "#9B9EAC");
 
-    // Prepare container for user data
+    // Prepare containers each session data
     const groups = container
       .append("svg")
-      .attr("height", height)
+      .attr("height", HEIGHT)
       .selectAll("g")
       .data(sessions)
       .join("g")
       .attr("class", "user-data")
-      .attr("transform", function (_, i) {
-        return `translate(${xScale(i + 1)}, 0)`;
-      });
+      .attr("transform", (_, i) => `translate(${xScale(i + 1)}, 0)`);
 
     // Display user weights as bars
     groups
       .append("rect")
       .attr("y", ({ kilogram }) => yScale(kilogram))
       .attr("width", 10)
-      .attr("height", ({ kilogram }) => height - yScale(kilogram) + 10)
+      .attr("height", ({ kilogram }) => HEIGHT - yScale(kilogram) + 10)
       .attr("rx", 5)
       .attr("ry", 5)
-      .attr("transform", `translate(${xScale.bandwidth() / 3}, ${height})`)
+      .attr("transform", `translate(${xScale.bandwidth() / 3}, ${HEIGHT})`)
       .style("fill", "#282D30")
       .transition()
       .duration(1000)
       .attr("transform", `translate(${xScale.bandwidth() / 3},0)`);
 
     // Define calorie scale
+    const calories = props.activity.getCalories();
     const calScale = scaleLinear()
-      .domain([Math.min(...userCalories) - 50, Math.max(...userCalories) + 50])
-      .range([height, 0]);
+      .domain([Math.min(...calories) - 50, Math.max(...calories) + 50])
+      .range([HEIGHT, 0]);
 
     // Display user calories as bars
     groups
       .append("rect")
       .attr("y", ({ calories }) => calScale(calories))
       .attr("width", 10)
-      .attr("height", ({ calories }) => height - calScale(calories) + 10)
+      .attr("height", ({ calories }) => HEIGHT - calScale(calories) + 10)
       .attr("rx", 5)
       .attr("ry", 5)
       .style("fill", "#E60000")
       .attr(
         "transform",
-        `translate(${(xScale.bandwidth() * 2) / 3 - 10}, ${height})`
+        `translate(${(xScale.bandwidth() * 2) / 3 - 10}, ${HEIGHT})`
       )
       .transition()
       .duration(1300)
@@ -160,7 +160,7 @@ function ActivityChart({ userId }) {
       .append("rect")
       .attr("class", "hover-bar")
       .attr("width", xScale.bandwidth())
-      .attr("height", height)
+      .attr("height", HEIGHT)
       .attr("fill", "rgba(196,196,196, 0.3)");
 
     // Tooltip container
@@ -214,7 +214,7 @@ function ActivityChart({ userId }) {
 }
 
 ActivityChart.propTypes = {
-  userId: PropTypes.number.isRequired,
+  activity: PropTypes.object.isRequired,
 };
 
 export default ActivityChart;

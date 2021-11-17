@@ -1,22 +1,21 @@
 import { line, scaleLinear, scalePoint, select } from "d3";
 import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
-import Service from "../api";
 import "../css/PerformanceChart.css";
 import { getSpiderCoord } from "../helper/spiderChart";
+import PerformanceData from "../models/PerformanceData";
 
-function PerformanceChart({ userId }) {
+/**
+ * Display user performance chart
+ * @param {{stats: Array<PerformanceData>}} param0 Performance stats
+ * @returns {JSX.Element}
+ */
+function PerformanceChart({ stats }) {
   const chartContainer = useRef(null);
 
   useEffect(async () => {
-    // Fetch user performance stats
-    const res = await Service.getUserPerformance(userId);
-    const json = await res.json();
-    const { data } = json.data;
-
-    /**
-     * Prepare SVG container
-     */
+    // Unless sessions available, skip drawing process
+    if (!stats) return;
 
     // Define SVG size
     const MARGIN = 40,
@@ -27,33 +26,26 @@ function PerformanceChart({ userId }) {
       OFFSET = Math.PI;
 
     // SVG
-    const svg = select(chartContainer.current)
-      .attr("width", WIDTH + MARGIN)
-      .attr("height", HEIGHT + MARGIN);
-
-    // Clean up
-    svg.selectAll("*").remove();
+    const svg = select(chartContainer.current);
+    svg.attr("width", WIDTH + MARGIN).attr("height", HEIGHT + MARGIN);
+    svg.selectAll("*").remove(); // Clean old chart
 
     // Add center container
     const center = svg
       .append("g")
       .attr("transform", `translate(${RADIUS + MARGIN},${RADIUS + MARGIN})`);
 
-    /**
-     * Add background polygons
-     */
-
     // Define scale
     const domain = [0, 50, 100, 150, 200, 250];
     const scale = scalePoint().domain(domain).range([0, RADIUS]);
 
-    // Add polygons
+    // Add inner polygons
     domain.forEach((tick) => {
       // Define each tick coordinates
-      const points = data.map((_, i) =>
+      const points = stats.map((_, i) =>
         getSpiderCoord({
           radius: scale(tick),
-          angle: 2 * Math.PI * ((i + 1) / data.length),
+          angle: 2 * Math.PI * ((i + 1) / stats.length),
           offset: OFFSET,
         })
       );
@@ -73,36 +65,19 @@ function PerformanceChart({ userId }) {
         );
     });
 
-    /**
-     * Add labels
-     */
-
-    // Translated labels to French
-    const labels = [
-      "Cardio",
-      "Energie",
-      "Endurance",
-      "Force",
-      "Vitesse",
-      "Intensité",
-    ];
-
     // Add text labels
-    data.forEach((_, i) => {
-      // Map data with new labels
-      const label = labels[i];
-
+    stats.forEach(({ kind }, i) => {
       // Define each text coordinates
       const { x, y } = getSpiderCoord({
         radius: RADIUS + 20,
-        angle: 2 * Math.PI * ((i + 1) / data.length),
+        angle: 2 * Math.PI * ((i + 1) / stats.length),
         offset: OFFSET,
       });
 
       // Draw labels around polygon
       center
         .append("text")
-        .text(label)
+        .text(kind)
         .attr("x", x)
         .attr("y", y)
         .attr("fill", "#fff")
@@ -112,23 +87,19 @@ function PerformanceChart({ userId }) {
         .attr("text-anchor", "middle");
     });
 
-    /**
-     * Add user stats as a polygon (red one)
-     */
-
     // Define scale
     const statScale = scaleLinear().domain([0, 250]).range([0, RADIUS]);
 
     // Define stats coordinates
-    const statPoints = data.map(({ value }, i) =>
+    const statPoints = stats.map(({ value }, i) =>
       getSpiderCoord({
         radius: statScale(value),
-        angle: 2 * Math.PI * ((i + 1) / data.length),
+        angle: 2 * Math.PI * ((i + 1) / stats.length),
         offset: OFFSET,
       })
     );
 
-    // Draw stats polygon
+    // Add user stats as a polygon (red one)
     center
       .append("path")
       .datum([...statPoints, statPoints[0]]) // Close the polygon path
@@ -152,7 +123,7 @@ function PerformanceChart({ userId }) {
 }
 
 PerformanceChart.propTypes = {
-  userId: PropTypes.number.isRequired,
+  stats: PropTypes.array.isRequired,
 };
 
 export default PerformanceChart;

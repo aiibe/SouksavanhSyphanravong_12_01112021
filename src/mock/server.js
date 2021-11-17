@@ -3,7 +3,7 @@
  * @param {number} id User ID
  * @returns Promise
  */
-export function findUserById(id) {
+export function getUserById(id) {
   const _id = parseInt(id);
   switch (_id) {
     case 12:

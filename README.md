@@ -1,10 +1,10 @@
 # SportSee
 
-Frontend app for SportSee built with ReactJS.
+Frontend app for SportSee built with React and D3 graphs.
 
 ## Installation
 
-Git clone the repo, then
+Git clone this repo, then
 
 ```
 cd <project_name>
@@ -12,12 +12,18 @@ npm i
 npm run dev
 ```
 
-By default, the data comes from `api/mockServer.js` which mocks the express server with same response.
+By default, data comes from `mock/server.js` which mocks the Express server responses.
 
-If you need to setup the express server in local, first git clone [this repo](https://github.com/OpenClassrooms-Student-Center/P9-front-end-dashboard) and launch it at `localhost:3000`.
+### Setup with Express server
 
-Then you need to set `CALL_FROM_API = true` in `api/query.js` in the react app to get real data from the server.
+If you need to setup the express server locally, first git clone [this repo](https://github.com/OpenClassrooms-Student-Center/P9-front-end-dashboard) and launch it at `localhost:3000`.
 
-## License
+Then you need to give the API url to `UserService` instance in `pages/User.jsx` (in our React app) in order to get data directly from the server.
 
-[MIT](https://choosealicense.com/licenses/mit/)
+## JSDoc
+
+```
+npm run doc
+```
+
+Then you can access the docs generated at http://localhost:5500/docs/index.html

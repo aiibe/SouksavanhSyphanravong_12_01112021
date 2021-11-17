@@ -3,11 +3,19 @@ import PropTypes from "prop-types";
 import { useEffect, useRef } from "react";
 import "../css/ScoreChart.css";
 
-function ScoreChart({ score = 35 }) {
+/**
+ * Display user score chart
+ * @param {{score: number}} param0 Score
+ * @returns {JSX.Element}
+ */
+function ScoreChart({ score }) {
   const chartContainer = useRef(null);
 
   useEffect(() => {
-    // Size
+    // Unless score, skip drawing process
+    if (!score) return;
+
+    // Define size and margins
     const MARGIN = 40,
       HEIGHT = 260 - MARGIN,
       WIDTH = 260 - MARGIN,
@@ -15,27 +23,19 @@ function ScoreChart({ score = 35 }) {
 
     // SVG
     const svg = select(chartContainer.current);
-
-    // Clean old drawing
-    svg.selectAll("*").remove();
-
-    // Style SVG
     svg
       .attr("width", WIDTH + MARGIN)
       .attr("height", HEIGHT + MARGIN)
       .attr("font-family", "Roboto");
+    svg.selectAll("*").remove(); // Clean old chart
 
-    // Center
+    // Add center container
     const center = svg
       .append("g")
       .attr("transform", `translate(${RADIUS + MARGIN}, ${RADIUS + MARGIN})`);
 
     // Add circle
     center.append("circle").attr("r", RADIUS).attr("fill", "#fff");
-
-    /**
-     * Add arc progression
-     */
 
     // Define arc
     const arcProgress = arc()

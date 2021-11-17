@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import "../css/Home.css";
 
+/**
+ * Display home page
+ * @returns {JSX.Element}
+ */
 function Home() {
   return (
     <div className="landing">
