@@ -23,7 +23,7 @@ function User() {
   const Service = useRef(new UserService());
 
   // Enable request from Express server by commenting out line below instead.
-  // const Service = useRef(new UserService(API_URL))
+  // const Service = useRef(new UserService(API_URL));
 
   // States
   const [currentUser, setCurrentUser] = useState(null);

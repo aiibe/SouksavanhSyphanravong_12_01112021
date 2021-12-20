@@ -33,7 +33,7 @@ class UserService {
    */
   async getUserById(userId) {
     const res = this.apiUrl
-      ? await fetch(apiUrl + "/user/" + userId)
+      ? await fetch(this.apiUrl + "/user/" + userId)
       : await getUserById(userId);
     const { data } = await res.json();
     if (!data) return null;
@@ -52,7 +52,7 @@ class UserService {
    */
   async getUserActivity(id) {
     const res = this.apiUrl
-      ? await fetch(apiUrl + "/user/" + id + "/activity")
+      ? await fetch(this.apiUrl + "/user/" + id + "/activity")
       : await getUserActivity(id);
     const { data } = await res.json();
     if (!data) return null;
@@ -73,7 +73,7 @@ class UserService {
    */
   async getUserSession(id) {
     const res = this.apiUrl
-      ? await fetch(apiUrl + "/user/" + id + "/average-sessions")
+      ? await fetch(this.apiUrl + "/user/" + id + "/average-sessions")
       : await getUserSession(id);
     const { data } = await res.json();
     if (!data) return null;
@@ -93,7 +93,7 @@ class UserService {
    */
   async getUserPerformance(id) {
     const res = this.apiUrl
-      ? await fetch(apiUrl + "/user/" + id + "/performance")
+      ? await fetch(this.apiUrl + "/user/" + id + "/performance")
       : await getUserPerformance(id);
     const json = await res.json();
     if (!json) return null;
